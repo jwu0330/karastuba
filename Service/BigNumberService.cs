@@ -71,13 +71,12 @@ namespace karastsuba.Service
 
             int m = maxLen / 2;
             string AL = A[..m], AR = A[m..], BL = B[..m], BR = B[m..];
-            // 遞迴
-            string Z0 = Multiply(AL, BL), Z2 = Multiply(AR, BR);
+            
+            string Z0 = Multiply(AL, BL), Z2 = Multiply(AR, BR); // 遞迴
             string Z1_temp = Multiply(Add(AL, AR), Add(BL, BR));
             string Z1 = Sub(Sub(Z1_temp, Z0), Z2);
 
-            // 模擬 ×10^(2m) 和 ×10^m
-            string Z0_shifted = Z0 + new string('0', 2 * m);
+            string Z0_shifted = Z0 + new string('0', 2 * m); // 模擬 ×10^(2m) 和 ×10^m
             string Z1_shifted = Z1 + new string('0', m);
             return Add(Add(Z0_shifted, Z1_shifted), Z2); // result
         }
@@ -93,13 +92,11 @@ namespace karastsuba.Service
             }
             return long.Parse(s[index..(index + ChunkSize)]);
         }
-
        
         private static void Initialization(string A, string B, int maxLen)
         {
             A = A.PadLeft(maxLen, '0');
             B = B.PadLeft(maxLen, '0');
         }
-
     }
 }
