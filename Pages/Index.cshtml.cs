@@ -23,7 +23,7 @@ namespace karatsuba.Pages
         // ���u��k�v�ɨ��o��
         public void OnPostSubtract()
         {
-            Result = BigNumberService.Subtract(A, B);
+            Result = BigNumberService.Sub(A, B);
         }
 
         // ���u���k�v�ɨ��o��

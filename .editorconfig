@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# IDE0018: 內嵌變數宣告
+csharp_style_inlined_variable_declaration = true

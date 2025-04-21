@@ -1,61 +1,50 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace karastsuba.Service
 {
     public class BigNumberService
     {
         private const int ChunkSize = 8;
-        //private string  ChunkSize = 8;
-        private static string? s1, s2;
-        public static void Initial(string A, string B)
+        public static void Initial(ref string A, ref string B, out int indexA, out int indexB, out int temp, out string chunkStr, out string[] chunks)
         {
-
+            A = A.PadLeft(Math.Max(A.Length, B.Length), '0');
+            B = B.PadLeft(Math.Max(A.Length, B.Length), '0');
+            indexA = A.Length - ChunkSize;
+            indexB = B.Length - ChunkSize;
+            temp = 0;
+            chunkStr = string.Empty;
+            chunks = new string[Math.Max(A.Length, B.Length) / ChunkSize + 1];
         }
 
         public static string Add(string A, string B)
         {
-
-            A = A.PadLeft(Math.Max(A.Length, B.Length), '0');
-            int indexA = A.Length - ChunkSize, indexB = B.Length - ChunkSize;
-            int carry = 0;
-            string chunkStr;
-            string[] chunks = new string[Math.Max(A.Length, B.Length) / ChunkSize + 1];
+            Initial(ref A, ref B, out int indexA, out int indexB, out int carry, out string chunkStr, out string[] chunks);
 
             for (int i = chunks.Length - 1; i >= 0; i--, indexA -= ChunkSize, indexB -= ChunkSize)
             {
-                // 若 index 超出字串範圍，則 GetChunkValue 會補足不足的部分              
                 chunkStr = (GetChunkValue(A, indexA) + GetChunkValue(B, indexB) + carry).ToString();
                 if (chunkStr.Length > ChunkSize)
                 {
                     carry = 1;
-                    // 取後面 ChunkSize 位並補滿
-                    chunks[i] = chunkStr[^ChunkSize..].PadLeft(ChunkSize, '0');
+                    chunks[i] = chunkStr[^ChunkSize..].PadLeft(ChunkSize, '0'); // 取後面 ChunkSize 位並補滿
                 }
                 else
                 {
-                    carry = 0;
-                    // 不足的左側補零
+                    carry = 0;                    
                     chunks[i] = chunkStr.PadLeft(ChunkSize, '0');
                 }
             }
             string result = string.Concat(chunks).TrimStart('0');
             return result == "" ? "0" : result;
         }
-        public static string Subtract(string A, string B)
+        public static string Sub(string A, string B)
         {
-            //int borrow = 0, chunkNumber;
-            int borrow = 0;
+            Initial(ref A, ref B, out int indexA, out int indexB, out int borrow, out string chunkStr, out string[] chunks);
             long chunkNumber;
-            A = A.PadLeft(Math.Max(A.Length, B.Length), '0');
-            B = B.PadLeft(Math.Max(A.Length, B.Length), '0');
-            // 決定要切成幾塊
-            string[] chunks = new string[Math.Max(A.Length, B.Length) / ChunkSize + 1];
-            int indexA = A.Length - ChunkSize, indexB = B.Length - ChunkSize;
-
-
+           
             for (int i = chunks.Length - 1; i >= 0; i--, indexA -= ChunkSize, indexB -= ChunkSize)
             {
-                // 當前塊的減法：A塊 - B塊 - 借位
                 chunkNumber = GetChunkValue(A, indexA) - GetChunkValue(B, indexB) - borrow;
                 if (chunkNumber < 0)
                 {
@@ -68,53 +57,48 @@ namespace karastsuba.Service
                 }
                 chunks[i] = chunkNumber.ToString().PadLeft(ChunkSize, '0');
             }
-            // 拼接結果
             string all = string.Concat(chunks).TrimStart('0');
             return all == "" ? "0" : all;
         }
-
-        private static long GetChunkValue(string s, int index)
-        {
-            // 若 index 為負，代表該區間不足 ChunkSize
-            if (index < 0)
-            {
-                if (index + ChunkSize <= 0) return 0;  // index 為負，相當於減少位數
-                // 從字串開頭取得剩餘部分，並以'0'左側補齊
-                string chunk = s[..(ChunkSize + index)].PadLeft(ChunkSize, '0');
-                return long.Parse(chunk);
-            }
-            // 固定長度區間
-            return long.Parse(s[index..(index + ChunkSize)]);
-        }
-
         public static string Multiply(string A, string B)
         {
             int maxLen = Math.Max(A.Length, B.Length);
             maxLen += maxLen % 2;
             Initialization(A, B, maxLen);
-
-            // 基底情況：兩數都很小，直接乘
-            if (maxLen <= 8)
-                return (long.Parse(s1) * long.Parse(s2)).ToString();
+               
+            if (maxLen <= 8) // 基底情況：兩數都很小，直接乘
+                return (long.Parse(A) * long.Parse(B)).ToString();
 
             int m = maxLen / 2;
-            string s1L = s1[..m], s1R = s1[m..], s2L = s2[..m], s2R = s2[m..];
+            string AL = A[..m], AR = A[m..], BL = B[..m], BR = B[m..];
             // 遞迴
-            string Z0 = Multiply(s1L, s2L), Z2 = Multiply(s1R, s2R);
-            string Z1_temp = Multiply(Add(s1L, s1R), Add(s2L, s2R));
-            string Z1 = Subtract(Subtract(Z1_temp, Z0), Z2);
+            string Z0 = Multiply(AL, BL), Z2 = Multiply(AR, BR);
+            string Z1_temp = Multiply(Add(AL, AR), Add(BL, BR));
+            string Z1 = Sub(Sub(Z1_temp, Z0), Z2);
 
             // 模擬 ×10^(2m) 和 ×10^m
             string Z0_shifted = Z0 + new string('0', 2 * m);
             string Z1_shifted = Z1 + new string('0', m);
-            string result = Add(Add(Z0_shifted, Z1_shifted), Z2);
-            return result;
+            return Add(Add(Z0_shifted, Z1_shifted), Z2); // result
         }
+
+        private static long GetChunkValue(string s, int index)
+        {
+            
+            if (index < 0)// 若 index 為負，代表該區間不足 ChunkSize
+            {
+                if (index + ChunkSize <= 0) return 0;  // index 為負，相當於減少位數
+                string chunk = s[..(ChunkSize + index)].PadLeft(ChunkSize, '0');  // 從字串開頭取得剩餘部分，並以'0'左側補齊
+                return long.Parse(chunk);
+            }
+            return long.Parse(s[index..(index + ChunkSize)]);
+        }
+
        
         private static void Initialization(string A, string B, int maxLen)
         {
-            s1 = A.PadLeft(maxLen, '0');
-            s2 = B.PadLeft(maxLen, '0');
+            A = A.PadLeft(maxLen, '0');
+            B = B.PadLeft(maxLen, '0');
         }
 
     }
