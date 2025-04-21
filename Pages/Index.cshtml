@@ -1,0 +1,51 @@
+﻿@page
+@model k7.Pages.IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="container-fluid px-5 py-4">
+    <h1 class="text-center display-4 mb-4">大數運算</h1>
+
+    <form method="post" class="row g-3">
+        <!-- 數字 A 輸入 -->
+        <div class="col-12">
+            <label asp-for="A" class="form-label">數字 A</label>
+            <textarea asp-for="A"
+                      class="form-control"
+                      rows="4"
+                      style="font-size:1.25rem; line-height:1.4; white-space:pre-wrap; word-break:break-all;"></textarea>
+        </div>
+
+        <!-- 數字 B 輸入 -->
+        <div class="col-12">
+            <label asp-for="B" class="form-label">數字 B</label>
+            <textarea asp-for="B"
+                      class="form-control"
+                      rows="4"
+                      style="font-size:1.25rem; line-height:1.4; white-space:pre-wrap; word-break:break-all;"></textarea>
+        </div>
+
+        <!-- 操作按鈕 -->
+        <div class="col-12 text-center">
+            <div class="btn-group" role="group">
+                <button type="submit" asp-page-handler="Add" class="btn btn-primary px-4 py-2" style="font-size:1.1rem;">加法</button>
+                <button type="submit" asp-page-handler="Subtract" class="btn btn-warning px-4 py-2" style="font-size:1.1rem;">減法</button>
+                <button type="submit" asp-page-handler="Multiply" class="btn btn-success px-4 py-2" style="font-size:1.1rem;">乘法</button>
+            </div>
+        </div>
+    </form>
+
+    <hr class="my-4" />
+
+    @if (!string.IsNullOrEmpty(Model.Result))
+    {
+        <div class="row">
+            <div class="col-12">
+                <h5>計算結果</h5>
+                <pre class="p-3 bg-light border"
+                     style="font-size:1.25rem; white-space:pre-wrap; word-break:break-all;">@Model.Result</pre>
+            </div>
+        </div>
+    }
+</div>
