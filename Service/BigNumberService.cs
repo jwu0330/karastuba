@@ -3,7 +3,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Linq;
 using System.Diagnostics;
 
-namespace k7.Service
+namespace karastsuba.Service
 {
     public class BigNumberService
     {
@@ -27,7 +27,7 @@ namespace k7.Service
             for (int i = chunks.Length - 1; i >= 0; i--, indexA -= ChunkSize, indexB -= ChunkSize)
             {
                 // 若 index 超出字串範圍，則 GetChunkValue 會補足不足的部分              
-                chunkStr = (GetChunkValue(A, indexA) + GetChunkValue(B, indexB) + ((long)carry)).ToString();
+                chunkStr = (GetChunkValue(A, indexA) + GetChunkValue(B, indexB) + carry).ToString();
                 if (chunkStr.Length > ChunkSize)
                 {
                     carry = 1;
@@ -59,7 +59,7 @@ namespace k7.Service
             for (int i = chunks.Length - 1; i >= 0; i--, indexA -= ChunkSize, indexB -= ChunkSize)
             {
                 // 當前塊的減法：A塊 - B塊 - 借位
-                chunkNumber = ((long)GetChunkValue(A, indexA)) - ((long)GetChunkValue(B, indexB)) - ((long)borrow);
+                chunkNumber = GetChunkValue(A, indexA) - GetChunkValue(B, indexB) - borrow;
                 if (chunkNumber < 0)
                 {
                     borrow = 1;
@@ -69,7 +69,7 @@ namespace k7.Service
                 {
                     borrow = 0;
                 }
-                chunks[i] = (chunkNumber).ToString().PadLeft(ChunkSize, '0');
+                chunks[i] = chunkNumber.ToString().PadLeft(ChunkSize, '0');
             }
             // 拼接結果
             string all = string.Concat(chunks).TrimStart('0');

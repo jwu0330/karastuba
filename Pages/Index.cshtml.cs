@@ -1,32 +1,32 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using k7.Service;
+using karastsuba.Service;
 
-namespace k7.Pages
+namespace karatsuba.Pages
 {
     public class IndexModel : PageModel
     {
         [BindProperty] public string A { get; set; }
         [BindProperty] public string B { get; set; }
 
-        // ¥u¯d¤@­Ó¦@¥Îªº Result
+        // ï¿½uï¿½dï¿½@ï¿½Ó¦@ï¿½Îªï¿½ Result
         public string Result { get; private set; }
 
         public void OnGet() { }
 
-        // «ö¡u¥[ªk¡v®É¨«³o¸Ì
+        // ï¿½ï¿½ï¿½uï¿½[ï¿½kï¿½vï¿½É¨ï¿½ï¿½oï¿½ï¿½
         public void OnPostAdd()
         {
             Result = BigNumberService.Add(A, B);
         }
 
-        // «ö¡u´îªk¡v®É¨«³o¸Ì
+        // ï¿½ï¿½ï¿½uï¿½ï¿½kï¿½vï¿½É¨ï¿½ï¿½oï¿½ï¿½
         public void OnPostSubtract()
         {
             Result = BigNumberService.Subtract(A, B);
         }
 
-        // «ö¡u­¼ªk¡v®É¨«³o¸Ì
+        // ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½kï¿½vï¿½É¨ï¿½ï¿½oï¿½ï¿½
         public void OnPostMultiply()
         {
             Result = BigNumberService.Multiply(A, B);
