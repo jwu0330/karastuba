@@ -1,0 +1,22 @@
+# 排除 VS 與 build 檔案
+.vs/
+*.user
+*.suo
+
+# build output
+bin/
+obj/
+
+# 設定檔
+*.log
+*.cache
+*.pdb
+*.exe
+*.dll
+*.json
+*.txt
+*.md
+
+# wwwroot 資料夾（保留空）
+wwwroot/
+!wwwroot/.gitkeep

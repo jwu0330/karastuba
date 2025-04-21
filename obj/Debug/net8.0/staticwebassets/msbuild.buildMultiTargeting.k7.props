@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\k7.props" />
-</Project>
