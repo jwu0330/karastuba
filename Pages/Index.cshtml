@@ -1,17 +1,17 @@
 ﻿@page
 @model karatsuba.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "大數運算";
 }
-
-<div class="container-fluid px-5 py-4">
+<section class="container-fluid px-5 py-4 beige-bg rounded">
     <h1 class="text-center display-4 mb-4">大數運算</h1>
 
-    <form method="post" class="row g-3">
+    <form id="calcForm" method="post" class="row g-3">
         <!-- 數字 A 輸入 -->
         <div class="col-12">
             <label asp-for="A" class="form-label">數字 A</label>
             <textarea asp-for="A"
+                      id="A"
                       class="form-control"
                       rows="4"
                       style="font-size:1.25rem; line-height:1.4; white-space:pre-wrap; word-break:break-all;"></textarea>
@@ -21,6 +21,7 @@
         <div class="col-12">
             <label asp-for="B" class="form-label">數字 B</label>
             <textarea asp-for="B"
+                      id="B"
                       class="form-control"
                       rows="4"
                       style="font-size:1.25rem; line-height:1.4; white-space:pre-wrap; word-break:break-all;"></textarea>
@@ -29,9 +30,18 @@
         <!-- 操作按鈕 -->
         <div class="col-12 text-center">
             <div class="btn-group" role="group">
-                <button type="submit" asp-page-handler="Add" class="btn btn-primary px-4 py-2" style="font-size:1.1rem;">加法</button>
-                <button type="submit" asp-page-handler="Subtract" class="btn btn-warning px-4 py-2" style="font-size:1.1rem;">減法</button>
-                <button type="submit" asp-page-handler="Multiply" class="btn btn-success px-4 py-2" style="font-size:1.1rem;">乘法</button>
+                <button type="button" onclick="window.calculateAdd()"
+                        class="btn btn-primary px-4 py-2" style="font-size:1.1rem;">
+                  加法
+                </button>
+                <button type="button" onclick="window.calculateSubtract()"
+                        class="btn btn-warning px-4 py-2" style="font-size:1.1rem;">
+                  減法
+                </button>
+                <button type="button" onclick="window.calculateMultiply()"
+                        class="btn btn-success px-4 py-2" style="font-size:1.1rem;">
+                  乘法
+                </button>
             </div>
         </div>
     </form>
@@ -40,12 +50,23 @@
 
     @if (!string.IsNullOrEmpty(Model.Result))
     {
-        <div class="row">
+        <div class="row mb-4 beige-light p-3 rounded">
             <div class="col-12">
                 <h5>計算結果</h5>
-                <pre class="p-3 bg-light border"
-                     style="font-size:1.25rem; white-space:pre-wrap; word-break:break-all;">@Model.Result</pre>
+                <pre id="resultPre" class="p-3 bg-light border" 
+                    style="font-size:1.25rem; white-space:pre-wrap; word-break:break-all;">@Model.Result</pre>
+
+                <button type="button" onclick="copyResult()"
+                        class="btn btn-secondary mt-2">複製結果</button>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-12">
+                <h5>歷史紀錄</h5>
+                <button type="button" onclick="clearHistory()"
+                        class="btn btn-link text-danger p-0">清除紀錄</button>
+                <ul id="historyList" class="list-group mt-2"></ul>
             </div>
         </div>
     }
-</div>
+</section>

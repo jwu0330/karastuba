@@ -1,4 +1,4 @@
-namespace karatsuba
+namespace karastsuba
 {
     public class Program
     {

@@ -64,7 +64,7 @@ namespace karastsuba.Service
         {
             int maxLen = Math.Max(A.Length, B.Length);
             maxLen += maxLen % 2;
-            Initialization(A, B, maxLen);
+            Initialization(ref A, ref B, maxLen);
                
             if (maxLen <= 8) // 基底情況：兩數都很小，直接乘
                 return (long.Parse(A) * long.Parse(B)).ToString();
@@ -93,7 +93,7 @@ namespace karastsuba.Service
             return long.Parse(s[index..(index + ChunkSize)]);
         }
        
-        private static void Initialization(string A, string B, int maxLen)
+        private static void Initialization(ref string A, ref string B, int maxLen)
         {
             A = A.PadLeft(maxLen, '0');
             B = B.PadLeft(maxLen, '0');
