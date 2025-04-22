@@ -20,3 +20,5 @@ obj/
 # wwwroot 資料夾（保留空）
 wwwroot/
 !wwwroot/.gitkeep
+
+Properties/
