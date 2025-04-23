@@ -84,24 +84,6 @@
     </div>   
                @* < !--不论有没有计算结果，都要永远渲染历史记录-- >    *@
 
-
-
-
-
-
-     @* <!-- 永远渲染历史记录区块  --> *@
-    <div class="row mb-4">
-        <div class="col-12">
-            <h5>历史记录</h5>
-            <button type="button"
-                    onclick="clearHistory()"
-                    class="btn btn-link text-danger p-0">
-                清除记录
-            </button>
-            <ul id="historyList" class="list-group mt-2"></ul>
-        </div>
-    </div>
-
     <hr class="my-4" />
 
     @if (!string.IsNullOrEmpty(Model.Result))
