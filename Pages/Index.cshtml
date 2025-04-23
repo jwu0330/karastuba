@@ -11,36 +11,49 @@
         <div class="col-12">
             <label asp-for="A" class="form-label">數字 A</label>
             <textarea asp-for="A"
-                      id="A"
-                      class="form-control"
-                      rows="4"
-                      style="font-size:1.25rem; line-height:1.4; white-space:pre-wrap; word-break:break-all;"></textarea>
+            id="A"
+            class="form-control"
+            rows="4"
+            style="font-size:1.25rem; line-height:1.4; white-space:pre-wrap; word-break:break-all;"></textarea>
         </div>
 
         <!-- 數字 B 輸入 -->
         <div class="col-12">
             <label asp-for="B" class="form-label">數字 B</label>
             <textarea asp-for="B"
-                      id="B"
-                      class="form-control"
-                      rows="4"
-                      style="font-size:1.25rem; line-height:1.4; white-space:pre-wrap; word-break:break-all;"></textarea>
+            id="B"
+            class="form-control"
+            rows="4"
+            style="font-size:1.25rem; line-height:1.4; white-space:pre-wrap; word-break:break-all;"></textarea>
+        </div>
+
+        <!-- 數字 B 輸入後：加入檔案上傳 -->
+        <div class="col-12">
+            <label for="txtUpload" class="form-label">從 TXT 檔讀入 A、B</label>
+            <input type="file"
+            id="txtUpload"
+            accept=".txt"
+            class="form-control"
+            onchange="handleFileUpload(event)" />
+            <div class="form-text">
+                檔案需為純文字，第一行是 A，第二行是 B。
+            </div>
         </div>
 
         <!-- 操作按鈕 -->
         <div class="col-12 text-center">
             <div class="btn-group" role="group">
                 <button type="button" onclick="window.calculateAdd()"
-                        class="btn btn-primary px-4 py-2" style="font-size:1.1rem;">
-                  加法
+                class="btn btn-primary px-4 py-2" style="font-size:1.1rem;">
+                    加法
                 </button>
                 <button type="button" onclick="window.calculateSubtract()"
-                        class="btn btn-warning px-4 py-2" style="font-size:1.1rem;">
-                  減法
+                class="btn btn-warning px-4 py-2" style="font-size:1.1rem;">
+                    減法
                 </button>
                 <button type="button" onclick="window.calculateMultiply()"
-                        class="btn btn-success px-4 py-2" style="font-size:1.1rem;">
-                  乘法
+                class="btn btn-success px-4 py-2" style="font-size:1.1rem;">
+                    乘法
                 </button>
             </div>
         </div>
@@ -50,23 +63,52 @@
 
     @if (!string.IsNullOrEmpty(Model.Result))
     {
-        <div class="row mb-4 beige-light p-3 rounded">
-            <div class="col-12">
-                <h5>計算結果</h5>
-                <pre id="resultPre" class="p-3 bg-light border" 
-                    style="font-size:1.25rem; white-space:pre-wrap; word-break:break-all;">@Model.Result</pre>
+        <div class="row mb-4 beige-light p-3 rounded">        
+            <div class="col-12">        
+                <h5>計算結果</h5>        
+                <pre id="resultPre" class="p-3 bg-light border"         
+                    style="font-size:1.25rem; white-space:pre-wrap; word-break:break-all;">@Model.Result</pre>     
 
-                <button type="button" onclick="copyResult()"
-                        class="btn btn-secondary mt-2">複製結果</button>
-            </div>
+            <button type="button" onclick="copyResult()"
+                    class="btn btn-secondary mt-2">複製結果</button> 
+            </div>   
+        </div>   
+    }
+    <div class="row mb-4">   
+        <div class="col-12">   
+            <h5>歷史紀錄</h5>   
+            <button type="button" onclick="clearHistory()"   
+                    class="btn btn-link text-danger p-0">清除紀錄</button>   
+            <ul id="historyList" class="list-group mt-2"></ul>   
+        </div>   
+    </div>   
+               @* < !--不论有没有计算结果，都要永远渲染历史记录-- >    *@
+
+
+
+
+
+
+     @* <!-- 永远渲染历史记录区块  --> *@
+    <div class="row mb-4">
+        <div class="col-12">
+            <h5>历史记录</h5>
+            <button type="button"
+                    onclick="clearHistory()"
+                    class="btn btn-link text-danger p-0">
+                清除记录
+            </button>
+            <ul id="historyList" class="list-group mt-2"></ul>
         </div>
-        <div class="row mb-4">
-            <div class="col-12">
-                <h5>歷史紀錄</h5>
-                <button type="button" onclick="clearHistory()"
-                        class="btn btn-link text-danger p-0">清除紀錄</button>
-                <ul id="historyList" class="list-group mt-2"></ul>
-            </div>
+    </div>
+
+    <hr class="my-4" />
+
+    @if (!string.IsNullOrEmpty(Model.Result))
+    {
+        <!-- 计算结果显示区域 -->
+        <div class="row mb-4 beige-light p-3 rounded">
+            <!-- …你的结果 PRE、复制按钮… -->
         </div>
     }
 </section>
